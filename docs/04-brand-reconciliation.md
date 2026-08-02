@@ -72,7 +72,26 @@ flickers — it breathes and sways.
 
 ---
 
-## 3. Assets on a dark background
+## 3. One source file, everything else derived
+
+`ember save logos/embersave logo.svg` — the full lockup — is the **only**
+source. The mark is produced by narrowing the lockup's viewBox to its leading
+square rather than kept as a second file, because two files drift and a crop
+cannot. When the lockup is revised, the mark is revised with it.
+
+The lockup was revised on 2026-08-02 to fix pixel artefacts in the wordmark
+(the old `r` carried a stray light pixel). The superseded renders that shipped
+in the first commit — `Asset 1.svg`, `Asset 1.png`, `Asset 1@4x.png`,
+`Logo png.png`, `logo mark.png` — were removed rather than left to be picked
+up by mistake. They remain in git history if needed.
+
+> `embersave logo.ai` is still the **pre-revision** Illustrator master. Re-export
+> it from the corrected artwork when convenient, or the next person to open it
+> will reintroduce the artefact.
+
+---
+
+## 4. Assets on a dark background
 
 The delivered SVGs are drawn for a light background. The sync frame and the
 "ember" half of the wordmark are near-black (`#131718` and four neighbours),
@@ -100,7 +119,7 @@ cd web && node scripts/build-logo-assets.mjs
 
 ---
 
-## 4. Assets deliberately not used
+## 5. Assets deliberately not used
 
 `banner.png` and the two profile images (`bot pfp.png`, `embersave pfp.png`)
 are Discord/bot assets and belong to the community repo's surfaces. They are

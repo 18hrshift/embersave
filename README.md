@@ -1,134 +1,137 @@
-# embersave
+<div align="center">
+
+<img src="web/public/embersave-lockup.svg#gh-light-mode-only" alt="embersave" width="380">
+<img src="web/public/embersave-lockup-dark.svg#gh-dark-mode-only" alt="embersave" width="380">
 
 **Keep the world alive.**
 
-Open-source shared save syncing for survival games. A group's world keeps
-moving between players, so nobody waits for one person to come online.
+Open-source shared save syncing for survival games.
 
-This directory is the **umbrella**: the brand, the public website, and the map
-of how the pieces relate. It is not the engine and not the bot — those live in
-their own repositories and are **not modified from here**.
+[embersave.18hrshift.com](https://embersave.18hrshift.com) · AGPL-3.0
 
----
-
-## What embersave is
-
-Co-op survival games come in two shapes. Either the world lives on one
-person's PC and nobody plays when they're offline, or it needs a dedicated
-server up 24/7 that somebody pays for and administers.
-
-embersave is a third option: a launcher that hands one shared world around a
-friend group. Your PC becomes the server when it's your turn, checkpoints as
-you play, and releases the world when you quit. Someone else picks it up
-tomorrow from their house.
-
-**Exactly one machine is ever authoritative.** That invariant is the whole
-system — everything else is plumbing around it.
-
-It is deliberately a step *up* from taking turns and a step *below* a
-dedicated server. See [`docs/00-overview.md`](docs/00-overview.md) for what
-that trade buys and costs.
+</div>
 
 ---
 
-## The three repositories
+## What it is
 
-| Repository | Role | Location | State |
-|---|---|---|---|
-| **engine** | The product. Launcher, agent, lease protocol, snapshots, game adapters. | [`18hrshift/palworld-shared-world`](https://github.com/18hrshift/palworld-shared-world) | Phases 0–1 done, Phase 2 core built. Pre-alpha. |
-| **community** | Discord bot, brand, service desk, the adapter funding flywheel. | `embersave-community` (local; no git remote yet) | Bot built and tested. Never run against a real server. |
-| **web** | This repo's [`web/`](web) — the public landing page. | `embersave/web` | Built here. |
+Co-op survival games come in two shapes, and both are annoying. Either the
+world lives on one person's PC and nobody plays when they're offline, or it
+needs a dedicated server running 24/7 that somebody pays for and administers.
 
-Full relationship map, including which repo owns which decision and where the
-contracts between them live: [`docs/01-repositories.md`](docs/01-repositories.md).
+So four friends rent a $12/month server, play hard for three weeks, drift
+apart, and cancel by month two. Everyone has done this.
 
-> **The engine repo is still named `palworld-shared-world`.** That is
-> intentional — renaming breaks clones and every existing doc link for no
-> benefit today. Its own brand doc says to rename when the second game adapter
-> ships, since that is the moment the old name becomes actively misleading
-> rather than merely dated.
+**embersave is a third option.** It's a launcher that hands one shared world
+around a friend group. Your PC becomes the server when it's your turn, saves
+in the background while you play, and passes the world on when you quit.
+Someone else picks it up tomorrow, from their house.
+
+Nobody has to be online for the world to still be there.
+
+## How a session goes
+
+1. **Open the launcher.** It shows the world — who hosted last, when it
+   synced, and whether anyone's in it right now.
+2. **Claim it.** If nobody's hosting, take it. Only one person can hold the
+   world at a time, so two of you clicking at once can never split it in two.
+3. **Your PC becomes the server.** It pulls the newest save, checks it, and
+   starts the game locally. Friends join in one click.
+4. **It saves as you play.** Older versions stay recoverable.
+5. **Quit, and it passes on.** The final save uploads and the world is
+   released for whoever's next.
+
+## Where your saves live
+
+**In your own Google Drive.** Not ours.
+
+They sit in an ordinary folder you can open, copy, or walk away with. Adding a
+friend to the world is just sharing that folder with them — no accounts to
+manage, no invite system to learn.
+
+The only thing stored anywhere else is a few kilobytes noting whose turn it
+is. No save data ever touches it, which is why it's free to run and why
+nothing of yours is lost if it goes down. You can also run the whole thing
+yourself if you'd rather not rely on us at all.
+
+## What it isn't
+
+| Why people rent a server | Does this replace it? |
+|---|---|
+| Nobody has to be online for the world to persist | **Yes** |
+| Simple setup | **Yes** — one app |
+| World joinable 24/7 | **No.** Someone has to be hosting to play. |
+| Dedicated hardware | **No** — though a gaming PC beats a budget VPS for four players |
+| Public servers, 30 strangers | **No, by design.** This is a friends system. |
+
+If you run a public community server, keep renting one. If you and three
+friends just want your world to still be there next Tuesday, this is for you.
+
+## Status
+
+**In development.** It works today on **Palworld** — tested end to end with
+two people alternating as host on one world.
+
+**There is no public build yet.** When there is, it'll be linked from the site
+and from here. Nothing about it is subscription-based; there are no tiers and
+nothing to upgrade.
+
+Want your game supported? The thing that decides whether a game can work is
+simple: *does your character still exist when someone else hosts?*
+[Tell us which game you play](https://github.com/18hrshift/palworld-shared-world/issues/new?template=game_adapter.md)
+— if you already know the answer for it, that alone is a real contribution.
 
 ---
 
-## This directory
+## This repository
 
-```
-embersave/
-├── README.md                  you are here — the umbrella
-├── docs/
-│   ├── 00-overview.md         what the product is, and what it is not
-│   ├── 01-repositories.md     how the three repos relate; who owns what
-│   ├── 02-website.md          architecture of web/, and the rules it inherits
-│   ├── 03-deployment.md       Vercel + Cloudflare runbook for the domain
-│   └── 04-brand-reconciliation.md  where the brand doc and the artwork disagree
-├── ember save logos/          the delivered brand art (source of truth)
-└── web/                       the landing page (Next.js, three.js)
-```
+embersave is one brand over a few codebases. **This repo holds the brand and
+the website** — the launcher itself lives separately.
 
-The site is live at
-**[embersave.18hrshift.com](https://embersave.18hrshift.com)**.
+| | What |
+|---|---|
+| [`web/`](web) | The site at embersave.18hrshift.com |
+| [`docs/`](docs) | How the pieces fit together |
+| [`ember save logos/`](ember%20save%20logos) | Brand artwork — the source every web asset is generated from |
 
-### Running the website
+### Running the site
 
 ```bash
 cd web
 npm install
 npm run dev        # http://localhost:3000
-npm run build      # static export to web/out
+npm run build      # static export → web/out
 npm run typecheck
 ```
 
----
+### Regenerating logo assets
 
-## Brand, in one screen
+Everything in `web/public/` and `web/app/icon.svg` is **generated** from
+`ember save logos/embersave logo.svg`. Edit the artwork, then:
 
-The canonical brand document lives in the engine repo at
-[`docs/09-brand-guidelines.md`](https://github.com/18hrshift/palworld-shared-world/blob/main/docs/09-brand-guidelines.md).
-It is the source of truth; the summary below exists so nobody has to guess.
+```bash
+cd web && node scripts/build-logo-assets.mjs
+```
 
-- **embersave is always lowercase**, including at the start of a sentence.
-- **Tagline:** Keep the world alive.
-- **Voice:** an experienced co-op teammate who understands infrastructure.
-  Direct, reassuring, specific. Calm especially when something goes wrong.
-- **Palette:** Ember Orange `#F27903` (from the artwork — the doc says
-  `#F26A3D`; see [`docs/04-brand-reconciliation.md`](docs/04-brand-reconciliation.md)),
-  Coal `#17191C`, Ash `#A7ADB4`, Warm White `#F7F4EE`; Campfire Gold, Safe
-  Green, Conflict Red, Cold Blue for states.
-- **The mark is pixel art** — a blocky flame in a dashed sync frame. The
-  wordmark is part of the artwork, not type.
-- **Type:** Inter for interface and copy, JetBrains Mono where the exact value
-  matters.
-- **The ember means continuity, not destruction.** No heavy glow, no flicker.
-- **Never communicate status by colour alone** — every state gets an icon and
-  a word.
+Don't hand-edit the outputs — they'll be overwritten, and the script exists so
+the mark and the wordmark can't drift apart.
 
----
+### Docs
 
-## Rules this directory inherits
+| Doc | What it answers |
+|---|---|
+| [`00-overview.md`](docs/00-overview.md) | What embersave is, in more depth |
+| [`01-repositories.md`](docs/01-repositories.md) | How the codebases relate; where a change belongs |
+| [`02-website.md`](docs/02-website.md) | How the site is built |
+| [`03-deployment.md`](docs/03-deployment.md) | How it's deployed |
+| [`04-brand-reconciliation.md`](docs/04-brand-reconciliation.md) | Where the brand doc and the artwork disagree |
 
-Both sibling repos enforce two estate rules mechanically, and the website is
-held to them too:
+## Licence
 
-- **Config is loaded, not mirrored.** A constant that duplicates a config
-  value is drift with a nicer name. On the website, colour is declared exactly
-  once — in `web/app/globals.css` — and the 3D scene reads those custom
-  properties off the document rather than repeating hex values in JavaScript.
-- **Documentation is a claim, not a wish.** Nothing here describes a feature
-  that does not exist. The website has no download button because the
-  installers are unsigned, and no Discord link because the server has not been
-  created.
+**[AGPL-3.0](LICENSE).** Run it, modify it, self-host it freely. If you run a
+modified version as a network service, publish your changes.
 
----
-
-## Status
-
-**Pre-alpha.** Palworld works end to end on two real machines. The installers
-are unsigned, so Windows SmartScreen warns on first launch. Nothing has been
-tested with two distinct player accounts, which remains the last real risk to
-the Palworld adapter.
-
-Not ready for strangers yet. The website says so, on purpose.
-
-**Licence: AGPL-3.0**, matching both sibling repos.
+The intent is narrow: keep a server-rental company from absorbing this and
+reselling it closed.
 
 Built by [18hrshift](https://github.com/18hrshift).

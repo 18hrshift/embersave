@@ -76,7 +76,7 @@ export function HowItWorks() {
         <SectionHeading
           eyebrow="How it works"
           title="Pass the save, not the problem."
-          lede="Exactly one machine is ever authoritative. That invariant is the whole system — everything else is plumbing around it."
+          lede="One person holds the world at a time. Everything else exists to make handing it over safe."
         />
 
         <ol className="relative space-y-px">
@@ -120,7 +120,7 @@ export function Storage() {
         <SectionHeading
           eyebrow="Your saves"
           title="They live in your own Google Drive. Not ours."
-          lede="The saves sit in an ordinary Drive folder you can open, copy, or walk away with. Sharing that folder with a friend is what adds them to the world — the Drive permission model is the group membership model."
+          lede="The saves sit in an ordinary Drive folder you can open, copy, or walk away with. Adding a friend to the world is just sharing that folder with them — there are no accounts to manage and no invite system to learn."
         />
 
         <div className="grid gap-5 md:grid-cols-3">
@@ -145,13 +145,13 @@ export function Storage() {
         </div>
 
         <p className="mt-8 max-w-2xl leading-relaxed text-ash">
-          The only thing hosted anywhere else is the lease: a few kilobytes
-          saying who's allowed to host right now. It holds no save data, which is
-          what makes it free to run and harmless if it goes down.{" "}
+          The only thing stored anywhere else is a few kilobytes noting whose
+          turn it is. No save data ever touches it — which is why it's free to
+          run, and why nothing of yours is lost if it goes down.{" "}
           <span className="text-warm-white">
-            You can also self-host the whole thing
+            You can also run the whole thing yourself
           </span>{" "}
-          — same codebase, different config.
+          if you'd rather not rely on us at all.
         </p>
       </div>
     </section>
@@ -219,25 +219,25 @@ export function Honesty() {
   );
 }
 
-/** Games and the adapter invitation. */
+/** Games, and the invitation to ask for one. */
 export function Games() {
   return (
     <section id="games" className="border-t border-coal-edge/60 py-24">
       <div className="mx-auto max-w-6xl px-5">
         <SectionHeading
           eyebrow="Games"
-          title="Palworld first. The core doesn't know what Palworld is."
-          lede="Game-specific behaviour lives behind an adapter interface. Adding a game is a config descriptor plus an adapter — if it ever requires touching the coordinator, the abstraction failed and we fix the abstraction."
+          title="Palworld first. More to come."
+          lede="Nothing about embersave is specific to one game — each is a thin layer on top of the same core, so new ones don't mean starting over."
         />
 
         <div className="grid gap-5 sm:grid-cols-2">
           {games.map((game) => {
-            const verified = game.state === "verified";
+            const working = game.state === "working";
             return (
               <article
                 key={game.name}
                 className={`rounded-xl border p-7 ${
-                  verified
+                  working
                     ? "border-safe/30 bg-safe/5"
                     : "border-dashed border-coal-edge bg-coal-raised"
                 }`}
@@ -248,12 +248,12 @@ export function Games() {
                   </h3>
                   <span
                     className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 font-mono text-xs ${
-                      verified
+                      working
                         ? "bg-safe/15 text-safe"
                         : "bg-coal-edge/60 text-ash"
                     }`}
                   >
-                    <span aria-hidden="true">{verified ? "✓" : "+"}</span>
+                    <span aria-hidden="true">{working ? "✓" : "+"}</span>
                     {game.state}
                   </span>
                 </div>
@@ -265,32 +265,25 @@ export function Games() {
 
         <div className="mt-10 rounded-xl border border-coal-edge bg-coal-raised p-7">
           <h3 className="mb-2 text-lg font-semibold text-warm-white">
-            The useful contribution isn't code
+            Want your game supported?
           </h3>
           <p className="mb-5 max-w-2xl leading-relaxed text-ash">
-            It's running the feasibility spike for a game you play. The
-            hard-won part of this project is per-game empirical knowledge, and
-            the question that decides whether a game is possible at all is
-            whether your character survives on someone else's machine.
+            Tell us which one you and your friends play. The thing that decides
+            whether a game can work is simple:{" "}
+            <span className="text-warm-white">
+              does your character still exist when someone else hosts?
+            </span>{" "}
+            If you already know the answer for your game, that alone is a real
+            contribution.
           </p>
-          <div className="flex flex-wrap gap-3">
-            <a
-              href={links.gameAdapter}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-ember px-4 py-2.5 text-sm font-semibold text-coal transition-transform hover:-translate-y-0.5"
-            >
-              Propose a game →
-            </a>
-            <a
-              href={links.spike}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-coal-edge px-4 py-2.5 text-sm font-medium text-warm-white transition-colors hover:border-ash/40"
-            >
-              Read the spike protocol
-            </a>
-          </div>
+          <a
+            href={links.requestGame}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-ember px-4 py-2.5 text-sm font-semibold text-coal transition-transform hover:-translate-y-0.5"
+          >
+            Request a game →
+          </a>
         </div>
       </div>
     </section>
@@ -307,9 +300,9 @@ export function Closing() {
             Free. No tiers, no accounts to upgrade.
           </h2>
           <p className="mt-5 leading-relaxed text-ash">
-            The hosted lease service costs essentially nothing to run — a few
-            kilobytes per world — so it's free. If it saves you a server rental,
-            throw a coffee at it. If it doesn't, don't.
+            The only thing we run for you is a few kilobytes per world, so it
+            costs us essentially nothing and it's free to you. If it saves you a
+            server rental, throw a coffee at it. If it doesn't, don't.
           </p>
           <p className="mt-4 leading-relaxed text-ash">
             Licensed{" "}
@@ -336,12 +329,12 @@ export function Closing() {
               View on GitHub →
             </a>
             <a
-              href={links.design}
+              href={links.requestGame}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-lg border border-coal-edge bg-coal-raised px-5 py-3 font-medium text-warm-white transition-colors hover:border-ash/40"
             >
-              Read the design doc
+              Request a game
             </a>
           </div>
 

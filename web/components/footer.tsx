@@ -1,11 +1,15 @@
 import { Wordmark } from "./logo";
 import { brand, links } from "@/lib/brand";
 
-const docs = [
-  { href: links.design, label: "Design" },
-  { href: links.roadmap, label: "Roadmap" },
-  { href: links.spike, label: "Spike protocol" },
-  { href: links.license, label: "Licence" },
+/*
+  Only links a visitor has a reason to open. The engine's design notes,
+  roadmap, and spike protocol are working documents for the people building
+  it — linking them here made the site read as an internal status page.
+*/
+const project = [
+  { href: links.engine, label: "GitHub", external: true },
+  { href: links.requestGame, label: "Request a game", external: true },
+  { href: links.license, label: "Licence", external: true },
 ];
 
 export function Footer() {
@@ -31,18 +35,18 @@ export function Footer() {
         <nav className="flex gap-12" aria-label="Footer">
           <div>
             <h2 className="mb-3 font-mono text-xs uppercase tracking-widest text-ash/50">
-              Docs
+              Project
             </h2>
             <ul className="space-y-2">
-              {docs.map((doc) => (
-                <li key={doc.label}>
+              {project.map((item) => (
+                <li key={item.label}>
                   <a
-                    href={doc.href}
+                    href={item.href}
                     target="_blank"
                     rel="noreferrer"
                     className="text-sm text-ash transition-colors hover:text-warm-white"
                   >
-                    {doc.label}
+                    {item.label}
                   </a>
                 </li>
               ))}
@@ -51,38 +55,23 @@ export function Footer() {
 
           <div>
             <h2 className="mb-3 font-mono text-xs uppercase tracking-widest text-ash/50">
-              Project
+              Coming
             </h2>
+            {/*
+              links.discord and links.download are null until those things
+              exist. Rendering them as plain, unlinked text is the honest form
+              — a dead invite on a page asking people to join is worse than no
+              invite at all.
+            */}
             <ul className="space-y-2">
               <li>
-                <a
-                  href={links.engine}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sm text-ash transition-colors hover:text-warm-white"
-                >
-                  GitHub
-                </a>
-              </li>
-              {/*
-                links.discord is null until the server exists. Rendering it as
-                plain, unlinked text is the honest form — a dead invite on a
-                page asking people to join a community is worse than no invite.
-              */}
-              <li>
-                <span
-                  className="text-sm text-ash/40"
-                  title="Scoped, not created yet"
-                >
-                  Discord — soon
+                <span className="text-sm text-ash/40" title="Not created yet">
+                  Discord
                 </span>
               </li>
               <li>
-                <span
-                  className="text-sm text-ash/40"
-                  title="Installers are unsigned; no download page yet"
-                >
-                  Download — soon
+                <span className="text-sm text-ash/40" title="No public build yet">
+                  Download
                 </span>
               </li>
             </ul>

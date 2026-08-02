@@ -29,13 +29,7 @@ export const links = {
   engine: "https://github.com/18hrshift/palworld-shared-world",
   org: "https://github.com/18hrshift",
   license: "https://github.com/18hrshift/palworld-shared-world/blob/main/LICENSE",
-  design:
-    "https://github.com/18hrshift/palworld-shared-world/blob/main/docs/00-design.md",
-  roadmap:
-    "https://github.com/18hrshift/palworld-shared-world/blob/main/docs/03-roadmap.md",
-  spike:
-    "https://github.com/18hrshift/palworld-shared-world/blob/main/docs/05-phase0-spike.md",
-  gameAdapter:
+  requestGame:
     "https://github.com/18hrshift/palworld-shared-world/issues/new?template=game_adapter.md",
 
   /** Scoped in the community repo, not created. No link until it exists. */
@@ -45,13 +39,15 @@ export const links = {
 } as const;
 
 /**
- * Project status, stated plainly. The engine README makes a point of not
- * printing a test count that will rot; the website makes the same trade by
- * describing state rather than counting things.
+ * Project status, stated plainly and in the reader's terms.
+ *
+ * This is a page for players, not a status report for the people building it —
+ * so it says what a visitor can and cannot do today, not which internal phase
+ * the project is in.
  */
 export const status = {
-  label: "pre-alpha",
-  detail: "Palworld works end to end. Installers are unsigned. Not ready for strangers yet.",
+  label: "in development",
+  detail: "Working today on Palworld. Not ready to install yet — no public build.",
 } as const;
 
 /** How it works — the five beats from the engine README, compressed. */
@@ -64,7 +60,7 @@ export const steps = [
   {
     n: "02",
     title: "Claim the world",
-    body: "If nobody is hosting, take it. The lease is atomic — two people clicking at once cannot both win.",
+    body: "If nobody is hosting, take it. Only one person can hold it at a time, so two of you clicking at once can never split the world in two.",
   },
   {
     n: "03",
@@ -105,9 +101,9 @@ export const storage = [
     tone: "safe",
   },
   {
-    what: "Lease + metadata",
+    what: "Who's hosting right now",
     where: "A tiny always-on service",
-    why: "Needs strong consistency. Kilobytes. Holds no save data.",
+    why: "A few kilobytes saying whose turn it is. It never holds your save.",
     tone: "cold",
   },
   {
@@ -119,6 +115,14 @@ export const storage = [
 ] as const;
 
 export const games = [
-  { name: "Palworld", state: "verified", note: "Proven on two machines, end to end." },
-  { name: "Your game", state: "open", note: "An adapter is a config file and an interface." },
+  {
+    name: "Palworld",
+    state: "working",
+    note: "Tested end to end — two people alternating as host on one world.",
+  },
+  {
+    name: "Your game",
+    state: "open",
+    note: "Adding a game is a small amount of glue, not a rewrite. Tell us which one you play.",
+  },
 ] as const;
