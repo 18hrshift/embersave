@@ -1,0 +1,164 @@
+# How the repositories relate
+
+embersave is three codebases with one brand. They are deliberately separate,
+and the seams between them are contracts rather than imports.
+
+This document is the map. It is the reason the umbrella directory exists.
+
+---
+
+## The map
+
+```
+                        ┌───────────────────────────────┐
+                        │  embersave  (this directory)  │
+                        │  brand · docs · website       │
+                        └───────────────┬───────────────┘
+                                        │  describes, links to
+                        ┌───────────────┴───────────────┐
+                        │                               │
+            ┌───────────▼───────────┐       ┌───────────▼───────────┐
+            │  engine               │       │  community            │
+            │  palworld-shared-     │◄─────►│  embersave-community  │
+            │  world                │       │                       │
+            │                       │ bridge│  Discord bot (Sparky) │
+            │  launcher · agent     │contract  service desk         │
+            │  lease · snapshots    │       │  adapter flywheel     │
+            │  game adapters        │       │  dashboard (scoped)   │
+            └───────────────────────┘       └───────────────────────┘
+```
+
+Nothing in this directory imports from either sibling. The website links to
+them and restates their claims; it does not depend on their code.
+
+---
+
+## engine — `18hrshift/palworld-shared-world`
+
+**The product.** Everything that touches a save file lives here.
+
+| Area | What it is |
+|---|---|
+| `src/launcher/` | The desktop app users open |
+| `src-tauri/` | Tauri shell; ships the agent as a single executable |
+| `src/agent/` | Runs the game server, checkpoints, uploads |
+| `src/control-plane/` | The lease — who is allowed to host right now |
+| `src/snapshot/` | Snapshot chain and the thinning ladder |
+| `src/adapters/` | Per-game behaviour, behind an interface |
+| `config/games/*.json` | One descriptor per supported game |
+| `contracts/` | `game-adapter-v1` and `shared-save-config-v1` schemas |
+
+**Owns:** the lease protocol, the storage split, the snapshot format, the
+adapter interface, and the canonical brand document
+(`docs/09-brand-guidelines.md`).
+
+**Current state:** Phases 0 and 1 complete, Phase 2's core built. Palworld is
+the only adapter and it is verified on two real machines. Installers are
+unsigned. Secrets are still plaintext on Windows.
+
+**Deliberate constraint:** the core knows nothing about Palworld. If adding a
+game ever requires touching the coordinator, the abstraction failed and the
+abstraction gets fixed — not the coordinator.
+
+---
+
+## community — `embersave-community`
+
+**The social half.** The Discord server, the bot that runs it, and the
+funding flywheel for new game adapters.
+
+| Area | What it is |
+|---|---|
+| `src/domain/` | The rules. Plain arguments in, plain results out — no Discord types |
+| `src/commands/` | Interaction plumbing, one file per feature area |
+| `src/discord/` | Signature verification, response builders, REST client |
+| `src/store/` | Store interface, in-memory and Postgres implementations |
+| `config/brand.json` | Brand values; nothing in source may hardcode them |
+| `api/` | Vercel entry point — thin |
+
+**Owns:** the ticket lifecycle, the game-request status ladder, and the
+community-facing brand vocabulary.
+
+**Current state:** the bot is built and tested but has **never run against a
+real Discord server**, because one has not been created. Everything is proven
+against a fake Discord client, which tests the logic and not the integration.
+The dashboard is scoped only.
+
+**Has no git remote yet** — it exists locally and has a Vercel project
+(`embersave-community`) under the 18hrshift team.
+
+**Architectural note:** HTTP interactions, no gateway. There is no always-on
+process, because embersave's pitch is that it costs almost nothing to run. A
+community bot on a paid always-on host would be the most expensive component
+in the stack.
+
+---
+
+## web — `embersave/web` (this directory)
+
+**The public face.** A static landing page. No server, no database, no auth.
+
+**Owns:** nothing the other two depend on. That is the point — it can be
+rewritten or thrown away without touching the product.
+
+See [`02-website.md`](02-website.md).
+
+---
+
+## The seams
+
+### engine ↔ community: the control-plane bridge
+
+The community bot wants to say things like *"your ember is cooling — Sam
+passed the torch 4 minutes ago."* That needs world state from the engine's
+control plane.
+
+**The contract is written; the bridge is not built.** It needs the engine
+side to exist first. Until then the bot has no knowledge of any world.
+
+This is the only runtime coupling between the two, and it is deliberately
+one-directional: the community repo reads, and never writes save state.
+
+### engine → web: claims
+
+The website restates the engine's README and design docs — the storage table,
+the honesty table, the five session steps. Those are **copied claims, not
+imports**, which means they can drift.
+
+`web/lib/brand.ts` is the single place any of it is written down. When the
+engine's claims change, that file is the only thing to update.
+
+### brand → everything
+
+The canonical brand document lives in the **engine** repo, not here, because
+it predates this directory and the engine is the thing people clone.
+
+Both the community repo (`config/brand.json`) and the website
+(`web/app/globals.css` + `web/lib/brand.ts`) restate parts of it locally so
+they can enforce "config is loaded, not mirrored" within their own boundary.
+
+---
+
+## Where a change belongs
+
+| If you are changing… | Go to |
+|---|---|
+| How saves sync, lease, or restore | engine |
+| Adding a game | engine (`config/games/` + an adapter) |
+| What the bot says or does | community |
+| Discord server structure | community |
+| Marketing copy, landing page | web (`lib/brand.ts` first) |
+| Colours, voice, the name | engine `docs/09-brand-guidelines.md`, then propagate |
+| How the three fit together | this directory |
+
+---
+
+## What must not happen from here
+
+This umbrella directory is documentation and a website. Working in it must
+never modify the sibling repositories — they are live work with their own
+test gates, and both have branch state that this directory knows nothing
+about.
+
+If something here implies a change over there, the change is made there, by
+its own rules, with its own `bash test.sh` gate.

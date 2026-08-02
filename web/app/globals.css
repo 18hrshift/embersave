@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+/*
+  The embersave palette. This block is the single source of truth for colour on
+  the website — including the 3D scene, which reads these custom properties off
+  the document at mount rather than repeating the hex values in JavaScript.
+  See components/ember-scene.tsx.
+
+  Values 1:1 from docs/09-brand-guidelines.md in the engine repo, §9.
+*/
+@theme {
+  /* Primary */
+  /*
+    Ember Orange is taken from the delivered logo art, not from the brand
+    doc. The doc specifies #F26A3D — a coral — while every orange in
+    `ember save logos/` sits on a purer ramp around #F27903. Two oranges that
+    close together read as a mistake rather than a palette, so the site
+    matches the artwork. See docs/04-brand-reconciliation.md.
+  */
+  --color-ember: #f27903;
+  --color-ember-deep: #d34610;
+  --color-ember-bright: #fca91c;
+  --color-ember-core: #fcd68d;
+
+  --color-coal: #17191c;
+  --color-ash: #a7adb4;
+  --color-warm-white: #f7f4ee;
+
+  /* Supporting */
+  --color-gold: #f3b64a;
+  --color-safe: #4faf83;
+  --color-conflict: #d9534f;
+  --color-cold: #5687b8;
+
+  /*
+    Surface tints. Not in the brand doc — derived here because Coal alone
+    cannot express elevation in a dark UI. Hue-matched to Coal, lightened.
+  */
+  --color-coal-raised: #1e2126;
+  --color-coal-edge: #2a2e35;
+
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Keep anchored sections clear of the fixed nav. */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: var(--color-coal);
+  color: var(--color-warm-white);
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+  Brand §10: sentence case, no all-caps headings. Headings are set tight and
+  compact rather than loud.
+*/
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background-color: var(--color-ember);
+  color: var(--color-coal);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ember);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/*
+  The ember pulse that travels the sync ring, and the section reveals, are
+  motion. Brand §5 asks for calm; the OS-level preference is the user telling
+  us what calm means for them.
+*/
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes ember-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.8);
+  }
+  15% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-120px) scale(0.4);
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
