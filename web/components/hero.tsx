@@ -47,12 +47,18 @@ export function Hero() {
 
           <div className="reveal mt-9 flex flex-wrap items-center gap-3">
             <a
-              href={links.engine}
+              href={links.project}
               target="_blank"
               rel="noreferrer"
               className="group inline-flex items-center gap-2 rounded-lg bg-ember px-5 py-3 font-semibold text-coal transition-transform hover:-translate-y-0.5"
             >
-              Read the source
+              {/*
+                Not "Read the source" — this points at the project repo (brand,
+                docs, this site). The launcher's source is still private, and
+                promising source that isn't there is the one thing this page
+                must not do. Relabel when the engine repo opens.
+              */}
+              View on GitHub
               <span
                 className="transition-transform group-hover:translate-x-0.5"
                 aria-hidden="true"

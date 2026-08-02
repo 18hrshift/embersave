@@ -78,7 +78,7 @@ nothing to upgrade.
 
 Want your game supported? The thing that decides whether a game can work is
 simple: *does your character still exist when someone else hosts?*
-[Tell us which game you play](https://github.com/18hrshift/palworld-shared-world/issues/new?template=game_adapter.md)
+[Tell us which game you play](https://github.com/18hrshift/embersave/issues/new?template=game-request.md)
 — if you already know the answer for it, that alone is a real contribution.
 
 ---

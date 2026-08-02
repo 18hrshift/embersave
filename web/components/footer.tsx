@@ -7,7 +7,7 @@ import { brand, links } from "@/lib/brand";
   it — linking them here made the site read as an internal status page.
 */
 const project = [
-  { href: links.engine, label: "GitHub", external: true },
+  { href: links.project, label: "GitHub", external: true },
   { href: links.requestGame, label: "Request a game", external: true },
   { href: links.license, label: "Licence", external: true },
 ];

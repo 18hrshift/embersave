@@ -108,12 +108,10 @@ hosted lease service costs essentially nothing to run, so it is free.
 
 If it saves you a server rental, throw a coffee at it. If it doesn't, don't.
 
-New game adapters are funded through a wishlist rather than pooled funds —
-the community repo's [ADR-0002] explains why a filled progress bar is a
-promise with a deadline, and why a spike that honestly ends in `declined`
-should be a technical finding rather than a refund conversation.
-
-[ADR-0002]: https://github.com/18hrshift/palworld-shared-world
+Support for new games is funded through a public wishlist rather than pooled
+funds. A filled progress bar is a promise with a deadline, and an
+investigation that honestly concludes "this game can't work" should be a
+technical finding rather than a refund conversation.
 
 ---
 

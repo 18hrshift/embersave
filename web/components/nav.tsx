@@ -41,12 +41,12 @@ export function Nav() {
           </span>
 
           <a
-            href={links.engine}
+            href={links.project}
             target="_blank"
             rel="noreferrer"
             className="rounded-md border border-coal-edge bg-coal-raised px-3 py-1.5 text-sm font-medium text-warm-white transition-colors hover:border-ember/50 hover:text-ember"
           >
-            Source
+            GitHub
           </a>
         </div>
       </nav>

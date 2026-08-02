@@ -26,11 +26,30 @@ export const brand = {
  * page about gifting is the exact shape of a scam. Same rule here.
  */
 export const links = {
-  engine: "https://github.com/18hrshift/palworld-shared-world",
+  /**
+   * The project's public home.
+   *
+   * This points at `18hrshift/embersave` — the brand, the docs, and this
+   * site. It is NOT the launcher's source: that lives in
+   * `18hrshift/palworld-shared-world`, which is still private, so linking it
+   * would send every visitor to a 404.
+   *
+   * ── When the engine repo goes public ──────────────────────────────────
+   * Nothing here updates on its own. Changing a repo's visibility on GitHub
+   * does not touch this file. Add:
+   *
+   *     engine: "https://github.com/18hrshift/palworld-shared-world",
+   *
+   * and point the hero and closing CTAs at it, since "the source" will then
+   * mean the launcher rather than the website. Also re-point `license` and
+   * `requestGame`, whose canonical homes are that repo.
+   * ─────────────────────────────────────────────────────────────────────
+   */
+  project: "https://github.com/18hrshift/embersave",
   org: "https://github.com/18hrshift",
-  license: "https://github.com/18hrshift/palworld-shared-world/blob/main/LICENSE",
+  license: "https://github.com/18hrshift/embersave/blob/main/LICENSE",
   requestGame:
-    "https://github.com/18hrshift/palworld-shared-world/issues/new?template=game_adapter.md",
+    "https://github.com/18hrshift/embersave/issues/new?template=game-request.md",
 
   /** Scoped in the community repo, not created. No link until it exists. */
   discord: null,

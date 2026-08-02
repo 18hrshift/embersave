@@ -139,6 +139,56 @@ they can enforce "config is loaded, not mirrored" within their own boundary.
 
 ---
 
+## Nothing here propagates on its own
+
+Worth being blunt about, because two of these look automatic and are not.
+
+| Change | Does it propagate? | What it actually takes |
+|---|---|---|
+| Push to `18hrshift/embersave` | **No.** The site does not redeploy. | The Vercel project is not connected to Git. Run `vercel deploy --prod` from `web/`. |
+| Flipping a repo's visibility | **No.** No link updates. | Every URL on the site is a literal string in `web/lib/brand.ts`. Edit it, rebuild, redeploy. |
+| Editing the engine's brand doc | **No.** | The site's palette lives in `web/app/globals.css`; copy lives in `web/lib/brand.ts`. Both are restatements. |
+| Editing artwork in `ember save logos/` | **No**, but it is one command. | `cd web && node scripts/build-logo-assets.mjs`, then rebuild. |
+
+The Git/deploy split is deliberate for now — a push is not a release, so the
+public repo can be updated without shipping the site, and vice versa. If that
+stops being useful, connect the Vercel project to the repo and the first row
+becomes automatic. Nothing else on this list ever will be.
+
+### When the engine repo goes public
+
+It is private today, so the site deliberately links to
+`18hrshift/embersave` — the project's public home — rather than to a repo
+that would 404 for every visitor.
+
+When `palworld-shared-world` opens, three things need doing by hand, all in
+`web/lib/brand.ts` (there is a comment there saying so):
+
+1. Add `engine: "https://github.com/18hrshift/palworld-shared-world"`.
+2. Re-point the hero and closing CTAs at it, and restore the "Read the
+   source" label — right now they say "View on GitHub" because the launcher's
+   source genuinely is not public and the page must not imply otherwise.
+3. Move `license` and `requestGame` back, since that repo is their canonical
+   home and already carries the game-adapter issue template.
+
+Then rebuild and redeploy.
+
+### What the engine repo doesn't know
+
+`palworld-shared-world` has **no note in it** about this umbrella, the live
+site, or the fact that a public page links to it. Anyone working only in that
+repo would not discover any of it.
+
+Adding that note was deliberately left undone: that repo is live work with its
+own `test.sh` gate, and at the time of writing it had uncommitted changes in
+its working tree. Dropping a doc into someone else's in-flight branch is how
+you cause a merge conflict for no reason.
+
+**It is still worth doing** once that work lands — a few lines in its README
+pointing at `18hrshift/embersave` and the live site.
+
+---
+
 ## Where a change belongs
 
 | If you are changing… | Go to |

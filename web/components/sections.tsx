@@ -321,7 +321,7 @@ export function Closing() {
 
           <div className="mt-9 flex flex-wrap justify-center gap-3">
             <a
-              href={links.engine}
+              href={links.project}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-ember px-5 py-3 font-semibold text-coal transition-transform hover:-translate-y-0.5"
