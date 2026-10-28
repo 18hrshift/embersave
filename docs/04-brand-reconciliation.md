@@ -6,7 +6,7 @@ difference is a decision on the record rather than a drift nobody noticed.
 
 **Sources**
 
-- `palworld-shared-world/docs/09-brand-guidelines.md` — the written spec
+- `embersave-app/docs/09-brand-guidelines.md` (formerly `palworld-shared-world`) — the written spec
 - `embersave/ember save logos/` — the delivered artwork (added 2026-08-02)
 
 ---

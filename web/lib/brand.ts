@@ -31,14 +31,14 @@ export const links = {
    *
    * This points at `18hrshift/embersave` — the brand, the docs, and this
    * site. It is NOT the launcher's source: that lives in
-   * `18hrshift/palworld-shared-world`, which is still private, so linking it
+   * `18hrshift/embersave-app`, which is still private, so linking it
    * would send every visitor to a 404.
    *
    * ── When the engine repo goes public ──────────────────────────────────
    * Nothing here updates on its own. Changing a repo's visibility on GitHub
    * does not touch this file. Add:
    *
-   *     engine: "https://github.com/18hrshift/palworld-shared-world",
+   *     engine: "https://github.com/18hrshift/embersave-app",
    *
    * and point the hero and closing CTAs at it, since "the source" will then
    * mean the launcher rather than the website. Also re-point `license` and

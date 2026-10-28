@@ -1,7 +1,9 @@
 # How the repositories relate
 
-embersave is three codebases with one brand. They are deliberately separate,
-and the seams between them are contracts rather than imports.
+embersave is three codebases with one brand, in two repos: this one (brand,
+docs, website) and `18hrshift/embersave-app` (the engine at its root, the
+community bot in `community/`). The codebases are deliberately separate, and
+the seams between them are contracts rather than imports.
 
 This document is the map. It is the reason the umbrella directory exists.
 
@@ -19,8 +21,8 @@ This document is the map. It is the reason the umbrella directory exists.
                         │                               │
             ┌───────────▼───────────┐       ┌───────────▼───────────┐
             │  engine               │       │  community            │
-            │  palworld-shared-     │◄─────►│  embersave-community  │
-            │  world                │       │                       │
+            │  embersave-app        │◄─────►│  embersave-app/       │
+            │  (repo root)          │       │  community/           │
             │                       │ bridge│  Discord bot (Sparky) │
             │  launcher · agent     │contract  service desk         │
             │  lease · snapshots    │       │  adapter flywheel     │
@@ -33,7 +35,10 @@ them and restates their claims; it does not depend on their code.
 
 ---
 
-## engine — `18hrshift/palworld-shared-world`
+## engine: `18hrshift/embersave-app`, repo root
+
+Renamed from `palworld-shared-world` when it moved to the `18hrshift` org on
+2026-10-27. The home-ops clone is still at `~/Desktop/Projects/palworld-shared-world`.
 
 **The product.** Everything that touches a save file lives here.
 
@@ -62,10 +67,11 @@ abstraction gets fixed — not the coordinator.
 
 ---
 
-## community — `embersave-community`
+## community: `18hrshift/embersave-app`, `community/`
 
 **The social half.** The Discord server, the bot that runs it, and the
-funding flywheel for new game adapters.
+funding flywheel for new game adapters. Paths below are relative to
+`community/`.
 
 | Area | What it is |
 |---|---|
@@ -79,13 +85,15 @@ funding flywheel for new game adapters.
 **Owns:** the ticket lifecycle, the game-request status ladder, and the
 community-facing brand vocabulary.
 
-**Current state:** the bot is built and tested but has **never run against a
-real Discord server**, because one has not been created. Everything is proven
-against a fake Discord client, which tests the logic and not the integration.
-The dashboard is scoped only.
+**Current state:** kept in the "Status, honestly" table of
+`community/README.md`, not restated here. On 2026-10-27 it said the bot is live
+in the Discord server and the dashboard is scoped only.
 
-**Has no git remote yet** — it exists locally and has a Vercel project
-(`embersave-community`) under the 18hrshift team.
+**History:** this was the separate `embersave-community` repo until 2026-10-27,
+when it was merged into `embersave-app` under `community/` with its history
+kept (18hrshift/embersave-app#1). The old repo is archived with a pointer
+README. The bot still deploys with the Vercel CLI from `community/` to the
+`embersave-community` Vercel project; that project is not connected to Git.
 
 **Architectural note:** HTTP interactions, no gateway. There is no always-on
 process, because embersave's pitch is that it costs almost nothing to run. A
@@ -117,7 +125,7 @@ control plane.
 side to exist first. Until then the bot has no knowledge of any world.
 
 This is the only runtime coupling between the two, and it is deliberately
-one-directional: the community repo reads, and never writes save state.
+one-directional: the community side reads, and never writes save state.
 
 ### engine → web: claims
 
@@ -133,7 +141,7 @@ engine's claims change, that file is the only thing to update.
 The canonical brand document lives in the **engine** repo, not here, because
 it predates this directory and the engine is the thing people clone.
 
-Both the community repo (`config/brand.json`) and the website
+Both the community bot (`community/config/brand.json`) and the website
 (`web/app/globals.css` + `web/lib/brand.ts`) restate parts of it locally so
 they can enforce "config is loaded, not mirrored" within their own boundary.
 
@@ -161,21 +169,22 @@ It is private today, so the site deliberately links to
 `18hrshift/embersave` — the project's public home — rather than to a repo
 that would 404 for every visitor.
 
-When `palworld-shared-world` opens, three things need doing by hand, all in
+When `embersave-app` opens, three things need doing by hand, all in
 `web/lib/brand.ts` (there is a comment there saying so):
 
-1. Add `engine: "https://github.com/18hrshift/palworld-shared-world"`.
+1. Add `engine: "https://github.com/18hrshift/embersave-app"`.
 2. Re-point the hero and closing CTAs at it, and restore the "Read the
    source" label — right now they say "View on GitHub" because the launcher's
    source genuinely is not public and the page must not imply otherwise.
 3. Move `license` and `requestGame` back, since that repo is their canonical
    home and already carries the game-adapter issue template.
 
-Then rebuild and redeploy.
+Then rebuild and redeploy. Opening that repo also makes `community/` public,
+so check it for anything that should stay private first.
 
 ### What the engine repo doesn't know
 
-`palworld-shared-world` has **no note in it** about this umbrella, the live
+`embersave-app` has **no note in it** about this umbrella, the live
 site, or the fact that a public page links to it. Anyone working only in that
 repo would not discover any of it.
 
@@ -206,9 +215,9 @@ pointing at `18hrshift/embersave` and the live site.
 ## What must not happen from here
 
 This umbrella directory is documentation and a website. Working in it must
-never modify the sibling repositories — they are live work with their own
-test gates, and both have branch state that this directory knows nothing
-about.
+never modify the app repo. It is live work with its own test gates (one for
+the engine, one in `community/`) and branch state that this directory knows
+nothing about.
 
 If something here implies a change over there, the change is made there, by
 its own rules, with its own `bash test.sh` gate.
